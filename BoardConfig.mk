@@ -1,4 +1,4 @@
-TARGET_OTA_ASSERT_DEVICE := klte,kltexx,kltezn,kltezm
+TARGET_OTA_ASSERT_DEVICE := klte,kltexx,kltezn,kltezm,kltechn
 
 # Kernel
 TARGET_PREBUILT_KERNEL := device/samsung/kltechn/zImage
