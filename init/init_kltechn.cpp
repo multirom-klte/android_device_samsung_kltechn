@@ -28,55 +28,37 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
-#include "log.h"
 #include "util.h"
 
-#include "init_msm8974.h"
-
-#define ISMATCH(a, b) (!strncmp((a), (b), PROP_VALUE_MAX))
-
-void gsm_properties(char const default_network[])
+void vendor_load_properties()
 {
-    property_set("telephony.lteOnGsmDevice", "1");
-    property_set("ro.telephony.default_network", default_network);
-    property_set("ro.telephony.ril.config", "newDialCode");
-}
+	char bootloader[PROP_VALUE_MAX];
 
-void init_target_properties()
-{
-    char platform[PROP_VALUE_MAX];
-    char bootloader[PROP_VALUE_MAX];
-    char device[PROP_VALUE_MAX];
-    char devicename[PROP_VALUE_MAX];
-    int rc;
+	property_get("ro.bootloader", bootloader);
 
-    rc = property_get("ro.board.platform", platform);
-    if (!rc || !ISMATCH(platform, ANDROID_TARGET))
-        return;
-
-    property_get("ro.bootloader", bootloader);
-
-    if (strstr(bootloader, "G9006V")) {
-        /* kltezn */
-        property_set("ro.build.fingerprint", "samsung/kltezn/kltezn:5.0/LRX21T/G9006VZNU1BOC2:user/release-keys");
-        property_set("ro.build.description", "kltezn-user 5.0 LRX21T G9006VZNU1BOC2 release-keys");
-        property_set("ro.product.model", "SM-G9006V");
-        property_set("ro.product.device", "kltezn");
-        gsm_properties("9");
-    } else if (strstr(bootloader, "G9008V")) {
-        /* kltezm */
-        property_set("ro.build.fingerprint", "samsung/kltezm/kltezm:5.0/LRX21T/G9008VZMU1BOC2:user/release-keys");
-        property_set("ro.build.description", "kltezm-user 5.0 LRX21T G9008VZMU1BOC2 release-keys");
-        property_set("ro.product.model", "SM-G9008V");
-        property_set("ro.product.device", "kltezm");
-        gsm_properties("9");
-    } 
-
-    property_get("ro.product.device", device);
-    strlcpy(devicename, device, sizeof(devicename));
-    INFO("Found bootloader id %s setting build properties for %s device\n", bootloader, devicename);
+	if (strstr(bootloader, "G9006W")) {
+		/* klteduoszn */
+		property_set("ro.product.model", "SM-G9006W");
+		property_set("ro.product.name", "klteduoszn");
+	} else if (strstr(bootloader, "G9008W")) {
+		/* klteduoszm */
+		property_set("ro.product.model", "SM-G9008W");
+		property_set("ro.product.name", "klteduoszm");
+	} else if (strstr(bootloader, "G9009W")) {
+		/* klteduosctc */
+		property_set("ro.product.model", "SM-G9009W");
+		property_set("ro.product.name", "klteduosctc");
+	} else if (strstr(bootloader, "G9008V")) {
+		/* kltezm */
+		property_set("ro.product.model", "SM-G9008V");
+		property_set("ro.product.name", "kltezm");
+	} else {
+		/* kltezn */
+		property_set("ro.product.model", "SM-G9006V");
+		property_set("ro.product.name", "kltezn");
+	}
+	property_set("ro.product.device", "klte");
 }
